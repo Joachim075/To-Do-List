@@ -1,0 +1,26 @@
+body{
+    color: rgb(10, 13, 16);
+    background-color: rgb(157, 157, 165);
+}
+h1{
+    margin-left: 20%;
+    font-size: 100px;
+    font-family: sans-serif;
+}
+.input-box{
+    width: 350px;
+    height: 30px;
+}
+li{
+    font-size: larger;
+    color: rgb(0, 0, 0);
+    margin: 5px;
+    background-color: white;
+ }
+.list-container{
+   border-radius: 4%;
+    margin-left: 25%;
+    margin-right: 15%;
+    background-color:  rgb(126, 105, 11);
+   
+}
