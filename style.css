@@ -1,26 +1,59 @@
-body{
-    color: rgb(10, 13, 16);
-    background-color: rgb(157, 157, 165);
+const input = document.querySelector(".input-box");
+const ul = document.querySelector("ul");
+const btn = document.querySelector(".but");
+
+// Load tasks from localStorage when the page loads
+const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+function addTask(taskText) {
+    const li = document.createElement("li");
+    li.innerHTML = `
+        <span class="task-text">${taskText}</span>
+        <span class="icons">
+            <i class="fas fa-check-circle complete"></i>
+            <i class="fas fa-edit edit"></i>
+            <i class="fas fa-trash-alt delete"></i>
+        </span>
+    `;
+    ul.appendChild(li);
 }
-h1{
-    margin-left: 20%;
-    font-size: 100px;
-    font-family: sans-serif;
-}
-.input-box{
-    width: 350px;
-    height: 30px;
-}
-li{
-    font-size: larger;
-    color: rgb(0, 0, 0);
-    margin: 5px;
-    background-color: white;
- }
-.list-container{
-   border-radius: 4%;
-    margin-left: 25%;
-    margin-right: 15%;
-    background-color:  rgb(126, 105, 11);
-   
-}
+
+// Load saved tasks when the page loads
+savedTasks.forEach(taskText => {
+    addTask(taskText);
+});
+
+btn.addEventListener("click", function() {
+    const taskText = input.value;
+    if (taskText.trim() !== "") {
+        addTask(taskText);
+        savedTasks.push(taskText);
+        localStorage.setItem('tasks', JSON.stringify(savedTasks));
+        input.value = "";
+    }
+});
+
+ul.addEventListener("click", function(event) {
+    const target = event.target;
+
+    if (target.classList.contains('complete')) {
+        const li = target.parentElement.parentElement;
+        li.classList.toggle("completed");
+    } else if (target.classList.contains('edit')) {
+        const li = target.parentElement.parentElement;
+        const text = li.querySelector('.task-text');
+        const newText = prompt("Edit task:", text.textContent);
+        if (newText !== null) {
+            text.textContent = newText;
+            const index = Array.from(ul.children).indexOf(li);
+            savedTasks[index] = newText;
+            localStorage.setItem('tasks', JSON.stringify(savedTasks));
+        }
+    } else if (target.classList.contains('delete')) {
+        const li = target.parentElement.parentElement;
+        const index = Array.from(ul.children).indexOf(li);
+        savedTasks.splice(index, 1);
+        localStorage.setItem('tasks', JSON.stringify(savedTasks));
+        ul.removeChild(li);
+    }
+});
